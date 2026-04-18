@@ -28,6 +28,8 @@ services:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
     image: esmart_backend_production_postgres
+    ports:
+      - '5435:5432'
     container_name: esmart_backend_local_postgres
     volumes:
       - esmart_backend_local_postgres_data:/var/lib/postgresql/18/docker
