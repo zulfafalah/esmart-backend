@@ -46,8 +46,14 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES = {
+    "default": env.db("DATABASE_URL"),
+    "esmart": env.db("ESMART_DATABASE_URL"),
+    "db_controller": env.db("DB_CONTROLLER_DATABASE_URL"),
+}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#database-routers
+DATABASE_ROUTERS = ["config.db_routers.DatabaseRouter"]
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -87,6 +93,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "core.users",
+    "legacy",
+    "db_controller",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -95,7 +103,11 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
-MIGRATION_MODULES = {"sites": "core.contrib.sites.migrations"}
+MIGRATION_MODULES = {
+    "sites": "core.contrib.sites.migrations",
+    "legacy": None,
+    "db_controller": None,
+}
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------

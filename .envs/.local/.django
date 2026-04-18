@@ -2,6 +2,12 @@
 # ------------------------------------------------------------------------------
 USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
+
+# Additional Databases
+# ------------------------------------------------------------------------------
+DATABASE_URL=postgres://debug:debug@postgres:5432/core
+ESMART_DATABASE_URL=postgres://debug:debug@postgres:5432/esmart
+DB_CONTROLLER_DATABASE_URL=postgres://debug:debug@postgres:5432/db_controller
 # Redis
 # ------------------------------------------------------------------------------
 REDIS_URL=redis://redis:6379/0
