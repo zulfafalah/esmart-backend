@@ -87,7 +87,9 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 USER django
 
-RUN DATABASE_URL="" \
+RUN DATABASE_URL="postgres://x:x@localhost/x" \
+  ESMART_DATABASE_URL="postgres://x:x@localhost/x" \
+  DB_CONTROLLER_DATABASE_URL="postgres://x:x@localhost/x" \
   DJANGO_SETTINGS_MODULE="config.settings.test" \
   python manage.py compilemessages
 
