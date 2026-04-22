@@ -1,11 +1,8 @@
 volumes:
   production_postgres_data: {}
   production_postgres_data_backups: {}
-  production_traefik: {}
   production_django_media: {}
-  
   production_redis_data: {}
-  
 
 
 services:
@@ -23,6 +20,8 @@ services:
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
+    ports:
+      - "127.0.0.1:8005:5000"
     command: /start
 
   postgres:
@@ -36,48 +35,26 @@ services:
     env_file:
       - ./.envs/.production/.postgres
 
-  traefik:
-    build:
-      context: .
-      dockerfile: ./compose/production/traefik/Dockerfile
-    image: core_production_traefik
-    depends_on:
-      - django
-    volumes:
-      - production_traefik:/etc/traefik/acme
-    ports:
-      - '0.0.0.0:80:80'
-      - '0.0.0.0:443:443'
-      - '0.0.0.0:5555:5555'
-
   redis:
     image: docker.io/redis:7.2
-    
     volumes:
       - production_redis_data:/data
-    
 
   celeryworker:
     <<: *django
     image: core_production_celeryworker
+    ports: []
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
     image: core_production_celerybeat
+    ports: []
     command: /start-celerybeat
 
   flower:
     <<: *django
     image: core_production_flower
+    ports:
+      - "127.0.0.1:5555:5555"
     command: /start-flower
-
-  nginx:
-    build:
-      context: .
-      dockerfile: ./compose/production/nginx/Dockerfile
-    image: core_production_nginx
-    depends_on:
-      - django
-    volumes:
-      - production_django_media:/usr/share/nginx/media:ro
