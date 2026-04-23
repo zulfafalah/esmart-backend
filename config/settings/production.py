@@ -153,8 +153,10 @@ LOGGING = {
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # Tools that generate code samples can use SERVERS to point to the correct domain
+# Derive the server URL dynamically from the first entry in ALLOWED_HOSTS
+_primary_host = ALLOWED_HOSTS[0] if ALLOWED_HOSTS else "localhost"
 SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": "https://example.com", "description": "Production server"},
+    {"url": f"https://{_primary_host}", "description": "Production server"},
 ]
 # Your stuff...
 # ------------------------------------------------------------------------------
