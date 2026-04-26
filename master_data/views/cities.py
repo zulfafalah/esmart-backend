@@ -17,7 +17,7 @@ from master_data.serializers.cities import CityWriteSerializer
 class CityListCreateView(APIView):
     """
     List all cities with pagination & search, or create a new one.
-    Cities are stored in `mtcity` where `coa10 != 0`.
+    Cities are stored in `mtcity` where `coa10 = 1`.
     """
 
     @extend_schema(
@@ -41,8 +41,8 @@ class CityListCreateView(APIView):
         search = request.query_params.get("search", "").strip()
         ordering = request.query_params.get("ordering", "cityid").strip()
 
-        # Cities: coa10 is not 0 (countries have coa10=0)
-        qs = Mtcity.objects.using("esmart").exclude(coa10=0)
+        # Cities: coa10 = 1
+        qs = Mtcity.objects.using("esmart").filter(coa10=1)
 
         if search:
             qs = qs.filter(Q(cityname__icontains=search))
@@ -100,7 +100,7 @@ class CityListCreateView(APIView):
         instance = Mtcity.objects.using("esmart").create(
             cityname=validated_data["cityname"],
             citycountry="",
-            coa10=validated_data["bunitid"],  # non-zero marks record as a City
+            coa10=1,
             bunitid=validated_data["bunitid"],
             created=now,
             createdby=user,
@@ -117,12 +117,12 @@ class CityListCreateView(APIView):
 class CityDetailView(APIView):
     """
     Retrieve, update, or delete a single city by cityid.
-    Ensures the record is a city (coa10 != 0).
+    Ensures the record is a city (coa10 = 1).
     """
 
     def _get_object(self, pk: int) -> Mtcity:
         try:
-            return Mtcity.objects.using("esmart").exclude(coa10=0).get(cityid=pk)
+            return Mtcity.objects.using("esmart").filter(coa10=1).get(cityid=pk)
         except Mtcity.DoesNotExist:
             raise NotFound(detail="City not found.")
 
@@ -153,13 +153,12 @@ class CityDetailView(APIView):
         validated_data = serializer.validated_data
         instance.cityname = validated_data["cityname"]
         instance.bunitid = validated_data["bunitid"]
-        instance.coa10 = validated_data["bunitid"]
         instance.modified = now
         instance.modifiedby = user
 
         instance.save(
             using="esmart",
-            update_fields=["cityname", "bunitid", "coa10", "modified", "modifiedby"],
+            update_fields=["cityname", "bunitid", "modified", "modifiedby"],
         )
 
         return Response(
