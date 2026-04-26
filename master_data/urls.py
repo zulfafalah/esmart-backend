@@ -2,6 +2,8 @@ from django.urls import path
 
 from master_data.views.accounts import AccountDetailView
 from master_data.views.accounts import AccountListCreateView
+from master_data.views.cities import CityDetailView
+from master_data.views.cities import CityListCreateView
 from master_data.views.countries import CountryDetailView
 from master_data.views.countries import CountryListCreateView
 from master_data.views.product_categories import ProductCategoryDetailView
@@ -33,4 +35,8 @@ urlpatterns = [
     # Country URLs
     path("countries/", CountryListCreateView.as_view(), name="country-list"),
     path("countries/<int:pk>/", CountryDetailView.as_view(), name="country-detail"),
+
+    # City URLs
+    path("cities/", CityListCreateView.as_view(), name="city-list"),
+    path("cities/<int:pk>/", CityDetailView.as_view(), name="city-detail"),
 ]
