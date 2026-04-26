@@ -10,6 +10,8 @@ from master_data.views.product_categories import ProductCategoryDetailView
 from master_data.views.product_categories import ProductCategoryListCreateView
 from master_data.views.regions import RegionDetailView
 from master_data.views.regions import RegionListCreateView
+from master_data.views.sales import SalesDetailView
+from master_data.views.sales import SalesListCreateView
 from master_data.views.suppliers import SupplierDetailView
 from master_data.views.suppliers import SupplierListCreateView
 from master_data.views.warehouses import WarehouseDetailView
@@ -45,4 +47,8 @@ urlpatterns = [
     # Region URLs
     path("regions/", RegionListCreateView.as_view(), name="region-list"),
     path("regions/<int:pk>/", RegionDetailView.as_view(), name="region-detail"),
+
+    # Sales URLs
+    path("sales/", SalesListCreateView.as_view(), name="sales-list"),
+    path("sales/<int:pk>/", SalesDetailView.as_view(), name="sales-detail"),
 ]
